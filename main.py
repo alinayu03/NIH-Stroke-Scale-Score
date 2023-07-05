@@ -1,50 +1,40 @@
 import streamlit as st
 
+st.markdown("## NIHSS")
+st.markdown("# Calculates the NIH Stroke Scale for quantifying stroke severity.")
 
-def calculate_nihss(score_dict):
-    score = 0
-    score += score_dict["level_of_consciousness"]
-    score += score_dict["left_arm_motor"]
-    score += score_dict["right_arm_motor"]
-    score += score_dict["left_leg_motor"]
-    score += score_dict["right_leg_motor"]
-    score += score_dict["limb_ataxia"]
-    score += score_dict["sensory"]
-    score += score_dict["language"]
-    score += score_dict["dysarthria"]
-    score += score_dict["extinction_inattention"]
-    return score
+mapping1A = {
+    'Alert; keenly responsive': 0,
+    'Arouses to minor stimulation': 1,
+    'Requires repeated stimulation to arouse': 2,
+    'Movements to pain': 3,
+    'Postures or unresponsive': 4
+}
 
+mapping1B = {
+    'Both questions right': 0,
+    '1 question right': 1,
+    '0 questions right': 2,
+    'Dysarthric/intubated/trauma/language barrier': 1,
+    'Aphasic': 2
+}
 
-def main():
-    st.title("NIH Stroke Scale/Score (NIHSS) Calculator")
+option1A = st.radio(
+    '1A: Level of consciousness',
+    ('Alert; keenly responsive', 'Arouses to minor stimulation',
+     'Requires repeated stimulation to arouse', 'Movements to pain',
+     'Postures or unresponsive')
+)
 
-    st.write(
-        "Please enter the scores for each component of the NIH Stroke Scale/Score (NIHSS).")
-    st.write("Use the following scale:")
-    st.write("- 0: Normal")
-    st.write("- 1: Mild")
-    st.write("- 2: Moderate")
-    st.write("- 3: Severe")
+option1B = st.radio(
+    '1B',
+    ('Both questions right', '1 question right',
+     '0 questions right', 'Dysarthric/intubated/trauma/language barrier',
+     'Aphasic')
+)
 
-    score_dict = {}
-    score_dict["level_of_consciousness"] = st.slider(
-        "Level of Consciousness", 0, 3, 0)
-    score_dict["left_arm_motor"] = st.slider("Left Arm Motor", 0, 3, 0)
-    score_dict["right_arm_motor"] = st.slider("Right Arm Motor", 0, 3, 0)
-    score_dict["left_leg_motor"] = st.slider("Left Leg Motor", 0, 3, 0)
-    score_dict["right_leg_motor"] = st.slider("Right Leg Motor", 0, 3, 0)
-    score_dict["limb_ataxia"] = st.slider("Limb Ataxia", 0, 3, 0)
-    score_dict["sensory"] = st.slider("Sensory", 0, 3, 0)
-    score_dict["language"] = st.slider("Language", 0, 3, 0)
-    score_dict["dysarthria"] = st.slider("Dysarthria", 0, 3, 0)
-    score_dict["extinction_inattention"] = st.slider(
-        "Extinction/Inattention", 0, 3, 0)
+score1A = mapping1A[option1A]
+score1B = mapping1B[option1B]
 
-    if st.button("Calculate NIHSS Score"):
-        score = calculate_nihss(score_dict)
-        st.write("NIHSS Score:", score)
-
-
-if __name__ == "__main__":
-    main()
+NIHSS_score = score1A + score1B
+st.write(f"NIHSS Score: {NIHSS_score}")
